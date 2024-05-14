@@ -8,7 +8,7 @@ namespace ArticlesApi.DAL
     {
         private readonly IMongoCollection<Article> articles;
 
-        public ArticlesRepository(ArticlesContext context)
+        public ArticlesRepository(ArticlesDbContext context)
         {
             articles = context.Articles;
         }

@@ -1,6 +1,7 @@
 ﻿using ArticlesApi.DAL;
 using ArticlesApi.Interfaces;
 using ArticlesApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
