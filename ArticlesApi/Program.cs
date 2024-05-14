@@ -22,6 +22,10 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddSwaggerGen();
 
+//Caching
+builder.Services.AddMemoryCache();
+
+
 //Versioning
 builder.Services.AddProblemDetails();
 builder.Services.AddApiVersioning(options =>

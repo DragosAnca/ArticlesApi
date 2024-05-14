@@ -29,7 +29,7 @@ namespace ArticlesApi.Models.Validation
         private bool ValidateUniqueness(Article article)
         {
             return articlesRepository.GetById(article.Id) == null 
-                && !articlesRepository.GetAll().Any(x => x.Title.Equals(article.Title));
+                && !articlesRepository.GetArticles(1,int.MaxValue).Any(x => x.Title.Equals(article.Title));
         }
 
         /// <summary>
