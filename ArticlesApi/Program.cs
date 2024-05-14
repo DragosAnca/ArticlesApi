@@ -24,14 +24,18 @@ builder.Services.AddSwaggerGen();
 
 //Versioning
 builder.Services.AddProblemDetails();
-builder.Services.AddApiVersioning(
-                    options =>
-                    {
-                        // reporting api versions will return the headers
-                        // "api-supported-versions" and "api-deprecated-versions"
-                        options.ReportApiVersions = true;
-                    })
-                .AddMvc();
+builder.Services.AddApiVersioning(options =>
+    {
+        options.DefaultApiVersion = new ApiVersion(1, 0);
+        options.AssumeDefaultVersionWhenUnspecified = false;
+        options.ReportApiVersions = false;
+    }).AddApiExplorer(options =>
+    {
+        options.GroupNameFormat = "'v'VVV";
+        options.SubstituteApiVersionInUrl = true;
+    })
+    .AddMvc();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

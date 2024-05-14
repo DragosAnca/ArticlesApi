@@ -1,8 +1,6 @@
-﻿using ArticlesApi.DAL;
-using ArticlesApi.Interfaces;
+﻿using ArticlesApi.Interfaces;
 using ArticlesApi.Models;
 using Asp.Versioning;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArticlesApi.Controllers
