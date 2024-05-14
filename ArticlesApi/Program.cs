@@ -19,7 +19,25 @@ builder.Services.AddSingleton<IArticlesRepository, ArticlesRepository>();
 
 builder.Services.AddControllersWithViews();
 
+//Swagger services
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
+
+// Use Swagger and Swagger UI
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Articles API V1");
+    c.RoutePrefix = string.Empty; // Set Swagger UI at the app's root
+});
+
+// Redirect root URL to Swagger UI
+app.MapGet("/", context =>
+{
+    context.Response.Redirect("/swagger");
+    return Task.CompletedTask;
+});
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

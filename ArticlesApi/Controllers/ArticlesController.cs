@@ -10,20 +10,41 @@ namespace ArticlesApi.Controllers
     [Route("api/articles")]
     public class ArticlesController : Controller
     {
-        private readonly IArticlesRepository repository;
+        private readonly IArticlesRepository articleRepository;
 
         public ArticlesController(IArticlesRepository repository)
         {
-            this.repository = repository;
+            this.articleRepository = repository;
         }
 
         [HttpGet]
-        public IActionResult GetAll() => Ok(repository.GetAll());
+        public ActionResult<IEnumerable<Article>> GetArticles(int pageNumber = 1, int pageSize = 10)
+        {
+            if (pageNumber <= 0 || pageSize <= 0)
+            {
+                return BadRequest("Page number and page size must be greater than zero.");
+            }
+
+            var articles = articleRepository.GetArticles(pageNumber, pageSize);
+            var totalArticles = articleRepository.GetTotalArticlesCount();
+
+            var paginationMetadata = new
+            {
+                TotalCount = totalArticles,
+                PageSize = pageSize,
+                CurrentPage = pageNumber,
+                TotalPages = (int)Math.Ceiling(totalArticles / (double)pageSize)
+            };
+
+            Response.Headers.Add("X-Pagination", Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetadata));
+
+            return Ok(articles);
+        }
 
         [HttpGet("{id}")]
         public IActionResult GetById(Guid id)
         {
-            var article = repository.GetById(id);
+            var article = articleRepository.GetById(id);
             if (article == null) return NotFound(new { Message = "Article not found" });
             return Ok(article);
         }
@@ -33,7 +54,7 @@ namespace ArticlesApi.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             article.Id = Guid.NewGuid(); // Ensure Id is generated here
-            repository.Add(article);
+            articleRepository.Add(article);
             return CreatedAtAction(nameof(GetById), new { id = article.Id }, article);
         }
 
@@ -41,14 +62,14 @@ namespace ArticlesApi.Controllers
         public IActionResult Update(Guid id, [FromBody] Article article)
         {
             if (id != article.Id) return BadRequest(new { Message = "ID mismatch" });
-            repository.Update(id, article);
+            articleRepository.Update(id, article);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)
         {
-            repository.Delete(id);
+            articleRepository.Delete(id);
             return NoContent();
         }
     }
