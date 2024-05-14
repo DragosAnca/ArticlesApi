@@ -10,23 +10,22 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+//Articles
 builder.Services.Configure<ArticleDbSettings>(
     builder.Configuration.GetSection(nameof(ArticleDbSettings)));
-
 builder.Services.AddSingleton<IDatabaseSettings>(sp =>
     sp.GetRequiredService<IOptions<ArticleDbSettings>>().Value);
-
 builder.Services.AddSingleton<ArticlesContext>();
-
 builder.Services.AddSingleton<IArticlesRepository, ArticlesRepository>();
 
-builder.Services.AddControllersWithViews();
-
+//Swagger
 builder.Services.AddSwaggerGen();
 
 //Caching
 builder.Services.AddMemoryCache();
 
+//Controllers
+builder.Services.AddControllersWithViews();
 //Rate limiting services
 builder.Services.AddRateLimiter(options =>
 {
@@ -79,6 +78,7 @@ app.MapGet("/", context =>
     return Task.CompletedTask;
 });
 
+//TODO: Configure certificate usage using X509
 //app.UseHttpsRedirection();
 app.UseStaticFiles();
 

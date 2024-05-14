@@ -4,6 +4,9 @@ using System.Net;
 
 namespace ArticlesApi.Models.Validation
 {
+    /// <summary>
+    /// Validator class to be used when adding or modyfing Articles
+    /// </summary>
     public class ArticleValidator
     {
         private readonly IArticlesRepository articlesRepository;
