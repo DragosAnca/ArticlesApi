@@ -22,7 +22,7 @@ namespace ArticlesApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Article>> GetArticles(int pageNumber = 1, int pageSize = 10)
+        public ActionResult<IEnumerable<Article>> GetArticles(int pageNumber = 1, int pageSize = 20)
         {
 
             var articles = articleRepository.GetArticles(pageNumber, pageSize);
@@ -54,9 +54,10 @@ namespace ArticlesApi.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             article.Id = Guid.NewGuid(); // Ensure Id is generated here
-            if (!articleValidator.ValidateArticle(article))
+            var validationResult = articleValidator.ValidateArticle(article);
+            if (validationResult != null)
             {
-                return BadRequest(new { Message = "Validation failed" });
+                return BadRequest(new { Message = validationResult });
             }
             articleRepository.Add(article);
             return CreatedAtAction(nameof(GetById), new { id = article.Id }, article);
@@ -66,9 +67,10 @@ namespace ArticlesApi.Controllers
         public IActionResult Update(Guid id, [FromBody] Article article)
         {
             if (id != article.Id) return BadRequest(new { Message = "ID mismatch" });
-            if (!articleValidator.ValidateArticle(article))
+            var validationResult = articleValidator.ValidateArticle(article);
+            if (validationResult != null)
             {
-                return BadRequest(new { Message = "Validation failed" });
+                return BadRequest(new { Message = validationResult });
             }
             articleRepository.Update(id, article);
             return NoContent();
