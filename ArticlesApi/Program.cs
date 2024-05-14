@@ -2,7 +2,9 @@ using ArticlesApi.DAL;
 using ArticlesApi.Interfaces;
 using ArticlesApi.Models;
 using Asp.Versioning;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Options;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +26,18 @@ builder.Services.AddMemoryCache();
 
 //Controllers
 builder.Services.AddControllersWithViews();
+//Rate limiting services
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("fixed", opt =>
+    {
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.PermitLimit = 50; // Limit to 100 requests per minute
+        opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        opt.QueueLimit = 2;
+    });
+});
+
 
 //Versioning
 builder.Services.AddProblemDetails();
@@ -69,6 +83,9 @@ app.MapGet("/", context =>
 app.UseStaticFiles();
 
 app.UseRouting();
+
+// Use rate limiting middleware
+app.UseRateLimiter();
 
 app.UseAuthorization();
 

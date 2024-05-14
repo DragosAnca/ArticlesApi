@@ -4,6 +4,7 @@ using Asp.Versioning;
 using ArticlesApi.Models.Validation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace ArticlesApi.Controllers
 {
@@ -21,6 +22,7 @@ namespace ArticlesApi.Controllers
             articleValidator = new ArticleValidator(repository);
         }
 
+        [EnableRateLimiting("fixed")]
         [HttpGet]
         public ActionResult<IEnumerable<Article>> GetArticles(int pageNumber = 1, int pageSize = 20)
         {
@@ -41,6 +43,7 @@ namespace ArticlesApi.Controllers
             return Ok(articles);
         }
 
+        [EnableRateLimiting("fixed")]
         [HttpGet("{id}")]
         public IActionResult GetById(Guid id)
         {
@@ -49,6 +52,7 @@ namespace ArticlesApi.Controllers
             return Ok(article);
         }
 
+        [EnableRateLimiting("fixed")]
         [HttpPost]
         public IActionResult Create([FromBody] Article article)
         {
@@ -63,6 +67,7 @@ namespace ArticlesApi.Controllers
             return CreatedAtAction(nameof(GetById), new { id = article.Id }, article);
         }
 
+        [EnableRateLimiting("fixed")]
         [HttpPut("{id}")]
         public IActionResult Update(Guid id, [FromBody] Article article)
         {
@@ -76,6 +81,7 @@ namespace ArticlesApi.Controllers
             return NoContent();
         }
 
+        [EnableRateLimiting("fixed")]
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)
         {
