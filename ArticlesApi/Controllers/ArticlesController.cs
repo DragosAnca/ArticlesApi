@@ -1,13 +1,15 @@
 ﻿using ArticlesApi.DAL;
 using ArticlesApi.Interfaces;
 using ArticlesApi.Models;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArticlesApi.Controllers
 {
+    [ApiVersion(1.0)]
     [ApiController]
-    [Route("api/articles")]
+    [Route("api/v{version:apiVersion}/articles")]
     public class ArticlesController : Controller
     {
         private readonly IArticlesRepository repository;

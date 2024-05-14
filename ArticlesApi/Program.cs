@@ -1,6 +1,7 @@
 using ArticlesApi.DAL;
 using ArticlesApi.Interfaces;
 using ArticlesApi.Models;
+using Asp.Versioning;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,16 @@ builder.Services.AddSingleton<IArticlesRepository, ArticlesRepository>();
 
 builder.Services.AddControllersWithViews();
 
+//Versioning
+builder.Services.AddProblemDetails();
+builder.Services.AddApiVersioning(
+                    options =>
+                    {
+                        // reporting api versions will return the headers
+                        // "api-supported-versions" and "api-deprecated-versions"
+                        options.ReportApiVersions = true;
+                    })
+                .AddMvc();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
