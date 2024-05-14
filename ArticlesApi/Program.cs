@@ -1,6 +1,7 @@
 using ArticlesApi.DAL;
 using ArticlesApi.Interfaces;
 using ArticlesApi.Models;
+using Asp.Versioning;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,20 @@ builder.Services.AddSingleton<IArticlesRepository, ArticlesRepository>();
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddSwaggerGen();
+
+//Versioning
+builder.Services.AddProblemDetails();
+builder.Services.AddApiVersioning(options =>
+    {
+        options.DefaultApiVersion = new ApiVersion(1, 0);
+        options.AssumeDefaultVersionWhenUnspecified = false;
+        options.ReportApiVersions = false;
+    }).AddApiExplorer(options =>
+    {
+        options.GroupNameFormat = "'v'VVV";
+        options.SubstituteApiVersionInUrl = true;
+    })
+    .AddMvc();
 
 var app = builder.Build();
 
