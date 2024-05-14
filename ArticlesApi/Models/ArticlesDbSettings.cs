@@ -2,6 +2,10 @@
 
 namespace ArticlesApi.Models
 {
+    /// <summary>
+    /// Contains Database settings for the Articles collection.
+    /// Configured in appsettings.json
+    /// </summary>
     public class ArticleDbSettings : IDatabaseSettings
     {
         public string ConnectionString { get; set; }
