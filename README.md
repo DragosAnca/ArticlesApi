@@ -10,6 +10,7 @@
 - **Repository Pattern**: Used in separating the Data Access layer from business logic.
 - **Singleton Pattern**: Minimize resource usage by instantiating an object only once and reusing it multiple times.
 - **In-Memory Caching**: Minimize the calls to the database.
+- **Rate limiter**: Lower the load from the endpoints, prevents abuse and ensures fair use.
 
 ## Development
 
